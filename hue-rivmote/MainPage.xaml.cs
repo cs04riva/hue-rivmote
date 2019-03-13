@@ -32,14 +32,6 @@ namespace hue_rivmote
 
         private async void LightOffClick(object sender, RoutedEventArgs e)
         {
-            /*ContentDialog startingHueCommands = new ContentDialog
-            {
-                Title = "Hue App Message",
-                Content = "Starting Hue Commands.",
-                CloseButtonText = "Ok"
-            };
-
-            ContentDialogResult result = await startingHueCommands.ShowAsync();*/
             HttpClient httpClient = new HttpClient();
 
             Uri requestUri = new Uri("http://192.168.1.164/api/RXsOaJ-zfHPTSZiZcdXjzsImuWrP1EIKgmtnzn97/lights/3/state");
@@ -51,14 +43,7 @@ namespace hue_rivmote
 
             HttpResponseMessage response = await httpClient.PutAsync(requestUri, lightCommand);
 
-            /*ContentDialog responseMessage = new ContentDialog
-            {
-                Title = "Hue App Message",
-                Content = respone.StatusCode.ToString(),
-                CloseButtonText = "Ok"
-            };           
-
-            ContentDialogResult result = await responseMessage.ShowAsync();*/
+            this.CreateOkDialog("Off Click: " + response.Content.ToString());
         }
 
         private async void LightOnClick(object sender, RoutedEventArgs e)
@@ -74,6 +59,18 @@ namespace hue_rivmote
                 "application/json");
 
             HttpResponseMessage response = await httpClient.PutAsync(requestUri, lightCommand);
+            this.CreateOkDialog("On Click: " + response.Content.ToString());
+        }
+
+        private async void CreateOkDialog(string message)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Hue - RivMote",
+                Content = message,
+                CloseButtonText = "OK"
+            };
+            await dialog.ShowAsync();
         }
     }
 }
